@@ -19,7 +19,6 @@ public:
 
 
 class LinkedList {
-    friend Node;
 private:
     Node *head;
     Node *tail;
