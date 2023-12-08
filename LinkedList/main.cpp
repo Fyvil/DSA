@@ -7,6 +7,7 @@ int main() {
     auto sum = LinkedList::addDigitsOfNodes(ll, newll);
     sum.reverse();
     sum.sort();
+    sum.deleteFirst();
     sum.print();
     sum.details();
     

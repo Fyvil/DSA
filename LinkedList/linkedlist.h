@@ -75,7 +75,7 @@ public:
 
     // Deleting nodes
 
-    void pop();
+    void deleteFirst();
     void deleteLast();
     bool deleteNode(int i);
     void deleteFirstOccurrence(int x);

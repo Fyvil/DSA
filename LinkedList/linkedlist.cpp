@@ -185,7 +185,7 @@ bool LinkedList::insert(int i, const std::vector<int> &vec) {
     return true;
 }
 
-void LinkedList::pop() {
+void LinkedList::deleteFirst() {
     if (length == 0) return;
     Node *temp = head;
     if (length == 1) {
@@ -201,7 +201,7 @@ void LinkedList::pop() {
 void LinkedList::deleteLast() {
     if (length == 0) return;
     if (length == 1) {
-        pop();
+        deleteFirst();
     } else {
         Node *temp = head;
         while (temp->next != nullptr) {
@@ -218,7 +218,7 @@ void LinkedList::deleteLast() {
 bool LinkedList::deleteNode(int i) {
     if (i < 0 || i >= length) return false;
     if (i == 0) {
-        pop();
+        deleteFirst();
     } else if (i == length - 1) {
         deleteLast();
     } else {
