@@ -20,12 +20,14 @@ private:
     std::shared_ptr<Node> last;
     int length;
 public:
+    Queue() : first{nullptr}, last{nullptr}, length{0} {}
     explicit Queue(int x);
     explicit Queue(const std::vector<int> &vec);
     ~Queue();
 
     void print() const;
     void details() const;
+    [[nodiscard]] int getFirst() const { return first->val; }
 
     bool enqueue(int x);
     bool enqueue(const std::vector<int> &vec);

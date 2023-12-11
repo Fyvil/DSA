@@ -31,6 +31,10 @@ Queue::~Queue() {
 }
 
 void Queue::print() const {
+    if (length == 0) {
+        std::cout << "Queue is empty" << std:endl;
+        return;
+    }
     std::shared_ptr<Node> t {first};
     while (t != nullptr) {
         std::cout << t->val << " -> ";
@@ -40,6 +44,10 @@ void Queue::print() const {
 }
 
 void Queue::details() const {
+    if (length == 0) {
+        std::cout << "First: NONE\nLast: NONE\nLength: 0" << std::endl;
+        return;
+    }
     std::cout << "First: " << first->val << "\nLast: " << last->val << "\nLength: " << length << std::endl;
 }
 
@@ -53,7 +61,7 @@ bool Queue::enqueue(int x) {
 }
 
 bool Queue::enqueue(const std::vector<int> &vec) {
-    if (vec.empty() || length <= 1) return false;
+    if (vec.empty() || length == 0) return false;
     for (const auto &num: vec) {
         enqueue(num);
     }
@@ -70,7 +78,7 @@ bool Queue::dequeue() {
 
 // Dequeues first k nodes
 bool Queue::dequeue(int k) {
-    if (length <= 1) return false;
+    if (length <= 1 || k > length) return false;
     for (int i = 0; i < k; i++) {
         dequeue();
     }
