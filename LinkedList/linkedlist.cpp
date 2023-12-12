@@ -67,7 +67,7 @@ void LinkedList::details() const {
 }
 
 std::shared_ptr<Node> LinkedList::get(int index) {
-    if (index < 0 || index > length) return nullptr;
+    if (index < 0 || index >= length) return nullptr;
     if (index == 0) {
         return getHead();
     } else if (index == length - 1) {
@@ -161,7 +161,6 @@ bool LinkedList::insert(int index, int x) {
 
 void LinkedList::deleteFirst() {
     if (length == 0) return;
-    std::shared_ptr<Node> nodeToDelete{head};
     if (length == 1) {
         head = nullptr;
         tail = nullptr;
