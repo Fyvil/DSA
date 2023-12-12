@@ -1,107 +1,57 @@
 #include "linkedlist.h"
 
-LinkedList::LinkedList() {
-    Node *newNode = new Node(0);
+LinkedList::LinkedList(int x) {
+    std::shared_ptr<Node> newNode{std::make_shared<Node>(x)};
     head = newNode;
     tail = newNode;
     length = 1;
 }
 
-LinkedList::LinkedList(int x) {
-    Node *newNode = new Node(x);
+LinkedList::LinkedList(int *arr, int arr_len) {
+    std::shared_ptr<Node> newNode{std::make_shared<Node>(arr[0])};
     head = newNode;
     tail = newNode;
     length = 1;
+    for (int i = 1; i < arr_len; i++) {
+        newNode = std::make_shared<Node>(arr[i]);
+        tail->next = newNode;
+        tail = newNode;
+        length++;
+    }
 }
+
 
 LinkedList::LinkedList(const std::vector<int> &vec) {
-    if (vec.empty()) {
-        LinkedList();
-    } else {
-        Node *firstNode = new Node(vec[0]);
-        head = firstNode;
-        tail = firstNode;
-        length = 1;
-        Node *temp = head;
-        for (int i = 1, n = static_cast<int>(vec.size()); i < n; i++) {
-            Node *newNode = new Node(vec[i]);
-            temp->next = newNode;
-            tail = newNode;
-            length++;
-            temp = temp->next;
-        }
+    if (vec.empty()) return;
+    std::shared_ptr<Node> newNode{std::make_shared<Node>(vec[0])};
+    head = newNode;
+    tail = head;
+    length = 1;
+    for (int i = 1, n = static_cast<int>(vec.size()); i < n; i++) {
+        newNode = std::make_shared<Node>(vec[i]);
+        tail->next = newNode;
+        tail = newNode;
+        length++;
     }
 }
 
-Node *LinkedList::getNodeByIndex(int index) const {
-    if (index >= length) return nullptr;
-    if (index == 0) return head;
-    if (index == length-1) return tail;
-    Node *temp = head;
-    for (int i = 0; i < index; i++) {
-        temp = temp->next;
+LinkedList::~LinkedList() {
+    while (head != nullptr) {
+        std::shared_ptr<Node> temp{head};
+        head = head->next;
+        length--;
     }
-    return temp;
-}
-
-// Returns the first node found with a specified value
-Node *LinkedList::getNodeByValue(int x) const {
-    Node *temp = head;
-    while (temp != nullptr) {
-        if (temp->next == nullptr) return tail;
-        if (temp->val == x) break;
-        temp = temp->next;
-    }
-    return temp;
-}
-
-// Gets index of the first occurrence of a particular node object with specified value
-int LinkedList::getIndex(int x) const {
-    Node *temp = head;
-    int index {0};
-    while (temp != nullptr) {
-        if (temp->val == x) return index;
-        temp = temp->next;
-        index++;
-    }
-    return -1;
-}
-
-// Checks if node containing specified value exists
-bool LinkedList::foundNode(int x) const {
-    if (length == 0) return false;
-    Node *temp = head;
-    while (temp != nullptr) {
-        if (temp->val == x) return true;
-        temp = temp->next;
-    }
-    return false;
-}
-
-// Checks if a duplicate of specified value exists
-bool LinkedList::foundDuplicate(int x) const {
-    if (!foundNode(x) || length <= 1) return false;
-    Node *slow = head;
-    while (slow->next != nullptr) {
-        if (slow->next == nullptr) return false;
-        if (slow->val == x) break;
-        slow = slow->next;
-    }
-    Node *fast = slow->next;
-    while (fast != nullptr) {
-        if (fast->val == slow->val) return true;
-        fast = fast->next;
-    }
-    return false;
+    head = nullptr;
+    tail = nullptr;
 }
 
 void LinkedList::print() const {
     if (length == 0) {
-        std::cout << "Empty linked list. Consider adding nodes." << std::endl;
+        std::cout << "Linked List is empty. Consider adding elements." << std::endl;
         return;
     }
-    Node *temp = head;
-    while (temp != nullptr) {
+    std::shared_ptr<Node> temp{head};
+    for (int i = 0; i < length; i++) {
         std::cout << temp->val << " -> ";
         temp = temp->next;
     }
@@ -109,31 +59,70 @@ void LinkedList::print() const {
 }
 
 void LinkedList::details() const {
-    if (length == 0 || getHead() == nullptr || getTail() == nullptr) {
-        std::cout << "Empty Linked List" << std::endl;
-        return;
+    if (length == 0) {
+        std::cout << "Empty Linked List." << std::endl;
+    } else {
+        std::cout << "Head: " << head->val << "\nTail: " << tail->val << "\nLength: " << length << std::endl;
     }
-    std::cout << "Length: " << length << '\n';
-    std::cout << "Head: " << getHead()->val << '\n';
-    std::cout << "Tail: " << getTail()->val << std::endl;
+}
+
+std::shared_ptr<Node> LinkedList::get(int index) {
+    if (index < 0 || index > length) return nullptr;
+    if (index == 0) {
+        return getHead();
+    } else if (index == length - 1) {
+        return getTail();
+    } else {
+        std::shared_ptr<Node> temp{head};
+        for (int i = 0; i < index; i++) {
+            temp = temp->next;
+        }
+        return temp;
+    }
+}
+
+std::shared_ptr<Node> LinkedList::getByValue(int x) {
+    if (length == 0) return nullptr;
+    if (head->val == x) return getHead();
+    std::shared_ptr<Node> temp{head};
+    while (temp->next != nullptr) {
+        if (temp->next == nullptr) return nullptr;
+        if (temp->next->val == x) break;
+        temp = temp->next;
+    }
+    return temp->next;
+}
+
+int LinkedList::getIndex(int x) {
+    std::shared_ptr<Node> temp{head};
+    for (int i = 0; i < length; i++) {
+        if (temp->val == x) return i;
+        temp = temp->next;
+    }
+    return -1;
 }
 
 void LinkedList::prepend(int x) {
-    Node *newNode = new Node(x);
-    Node *temp = head;
-    head = newNode;
-    head->next = temp;
+    std::shared_ptr<Node> newNode {std::make_shared<Node>(x)};
+    if (length == 0) {
+        head = newNode;
+        tail = newNode;
+    } else {
+        newNode->next = head;
+        head = newNode;
+    }
     length++;
 }
 
 void LinkedList::prepend(const std::vector<int> &vec) {
-    for (int i = static_cast<int>(vec.size()) - 1; i >= 0; i--) {
+    if (vec.empty()) return;
+    for (int i = static_cast<int>(vec.size() - 1); i >= 0; i--) {
         prepend(vec[i]);
     }
 }
 
 void LinkedList::append(int x) {
-    Node *newNode = new Node(x);
+    std::shared_ptr<Node> newNode {std::make_shared<Node>(x)};
     if (length == 0) {
         head = newNode;
         tail = newNode;
@@ -145,103 +134,128 @@ void LinkedList::append(int x) {
 }
 
 void LinkedList::append(const std::vector<int> &vec) {
-    for (const auto &n: vec) {
-        append(n);
+    if (vec.empty()) return;
+    for (const auto &num: vec) {
+        append(num);
     }
 }
 
-// Inserts node at specified index
-bool LinkedList::insert(int i, int x) {
-    if (i < 0 || i >= length) return false;
-    if (i == 0) {
+bool LinkedList::insert(int index, int x) {
+    if (index < 0 || index > length) return false;
+    if (index == 0) {
         prepend(x);
+    } else if (index == length) {
+        append(x);
     } else {
-        Node *prev = head;
-        for (int j = 0; j < i - 1; j++) {
-            prev = prev->next;
+        std::shared_ptr<Node> temp{head};
+        for (int i = 0; i < index - 1; i++) {
+            temp = temp->next;
         }
-        Node *newNode = new Node(x);
-        newNode->next = prev->next;
-        prev->next = newNode;
+        std::shared_ptr<Node> newNode{std::make_shared<Node>(x)};
+        newNode->next = temp->next;
+        temp->next = newNode;
         length++;
-    }
-    return true;
-}
-
-// Inserts nodes from a vector at a specified index
-bool LinkedList::insert(int i, const std::vector<int> &vec) {
-    if (i < 0 || i > length) return false;
-    if (i == 0) {
-        prepend(vec);
-    } else if (i == length) {
-        append(vec);
-    } else {
-        int index{0};
-        for (int j = i, n = static_cast<int>(vec.size()); j <= n; j++) {
-            insert(j, vec[index]);
-            index++;
-        }
     }
     return true;
 }
 
 void LinkedList::deleteFirst() {
     if (length == 0) return;
-    Node *temp = head;
+    std::shared_ptr<Node> nodeToDelete{head};
     if (length == 1) {
         head = nullptr;
         tail = nullptr;
     } else {
         head = head->next;
     }
-    delete temp;
     length--;
 }
 
 void LinkedList::deleteLast() {
     if (length == 0) return;
+    std::shared_ptr<Node> nodeToDelete{head};
     if (length == 1) {
-        deleteFirst();
+        head = nullptr;
+        tail = nullptr;
     } else {
-        Node *temp = head;
-        while (temp->next != nullptr) {
-            if (temp->next->next == nullptr) break;
-            temp = temp->next;
+        while (nodeToDelete->next != tail) {
+            nodeToDelete = nodeToDelete->next;
         }
-        tail = temp;
+        tail = nodeToDelete;
         tail->next = nullptr;
-        delete temp->next;
-        length--;
+    }
+    length--;
+}
+
+void LinkedList::deleteKNodes(int k) {
+    if (k > length || k <= 0) return;
+    for (int i = 0; i < k; i++) {
+        deleteFirst();
     }
 }
 
-bool LinkedList::deleteNode(int i) {
-    if (i < 0 || i >= length) return false;
-    if (i == 0) {
+void LinkedList::deleteNode(int index) {
+    if (index < 0 || index >= length || length == 0) return;
+    if (index == 0) {
         deleteFirst();
-    } else if (i == length - 1) {
+    } else if (index == length - 1) {
         deleteLast();
     } else {
-        Node *temp = head;
-        for (int j = 0; j < i - 1; j++) {
+        std::shared_ptr<Node> temp{head};
+        for (int i = 0; i < index - 1; i++) {
             temp = temp->next;
         }
-        Node *d = temp->next;
-        temp->next = d->next;
-        delete d;
+        temp->next = temp->next->next;
         length--;
     }
-    return true;
 }
 
-void LinkedList::deleteFirstOccurrence(int x) {
+void LinkedList::deleteNodeByValue(int x) {
     if (length == 0) return;
-    Node *temp = head;
-    int index {0};
-    while (temp != nullptr) {
-        if (temp->val == x) {
-            deleteNode(index);
-            return;
+    if (head->val == x) {
+        deleteFirst();
+        return;
+    }
+    std::shared_ptr<Node> nodeToDelete{head};
+    while (nodeToDelete->next != nullptr) {
+        if (nodeToDelete->next == nullptr) return;
+        if (nodeToDelete->next->val == x) break;
+        nodeToDelete = nodeToDelete->next;
+    }
+    if (nodeToDelete->next->next == nullptr) {
+        tail = nodeToDelete->next;
+        tail->next = nullptr;
+    } else {
+        nodeToDelete->next = nodeToDelete->next->next;
+    }
+    length--;
+}
+
+void LinkedList::deleteInRange(int start, int end) {
+    if (length == 0 || end <= start || end > length) return;
+    for (int i = start; i < end; i++) {
+        deleteNode(start);
+    }
+}
+
+void LinkedList::deleteAll() {
+    while (length != 0) {
+        deleteFirst();
+    }
+}
+
+bool LinkedList::empty() const {
+    if (length == 0) return true;
+    return false;
+}
+
+void LinkedList::deleteDuplicates(int x) {
+    std::shared_ptr<Node> temp{getByValue(x)};
+    int index{getIndex(x)};
+    if (temp == nullptr || index == -1) return;
+    while (temp->next != nullptr) {
+        if (temp->next->val == x) {
+            deleteNode(index + 1);
         } else {
             temp = temp->next;
             index++;
@@ -249,93 +263,34 @@ void LinkedList::deleteFirstOccurrence(int x) {
     }
 }
 
-void LinkedList::deleteAllOccurrences(int x) {
-    while (foundNode(x)) {
-        deleteFirstOccurrence(x);
-    }
-}
-
-void LinkedList::removeDuplicates(int x) {
-    if (!foundDuplicate(x) || length <= 1) return;
-    Node *temp = getNodeByValue(x);
-    while (temp->next != nullptr) {
-        if (temp->next->val == x) {
-            if (length == 2 || temp->next->next == nullptr) {
-                deleteLast();
-            } else {
-                Node *nodeToDelete = temp->next;
-                temp->next = nodeToDelete->next;
-                delete nodeToDelete;
-                length--;
-            }
-        } else {
-            temp = temp->next;
-        }
-    }
-}
-
-void LinkedList::removeAllDuplicates() {
-    if (length <= 1) return;
-    Node *temp = head;
-    while (temp->next != nullptr) {
-        if (foundDuplicate(temp->val)) {
-            removeDuplicates(temp->val);
-        }
-        temp = temp->next;
-    }
-}
-
-void LinkedList::reverse() {
-    if (length <= 1) return;
-    Node *before {nullptr};
-    Node *after {nullptr};
-    Node *temp = head;
-    head = tail;
-    tail = temp;
-    for (int i = 0; i < length; i++) {
-        after = temp->next;
-        temp->next = before;
-        before = temp;
-        temp = after;
-    }
-}
-
-// Reverse first k nodes
-void LinkedList::reverse(int k) {
-    if (length <= 1 || k > length) return;
-    if (k == length) {
-        reverse();
-        return;
-    }
-    Node *after {nullptr};
-    Node *before {nullptr};
-    Node *temp {head};
-    tail = head;
-    head = getNodeByIndex(k-1);
-    for (int i = 0; i < k; i++) {
-        after = temp->next;
-        temp->next = before;
-        before = temp;
-        temp = after;
-    }
+void LinkedList::deleteDuplicates() {
+    std::shared_ptr<Node> temp{head};
     while (temp != nullptr) {
-        tail->next = temp;
-        tail = temp;
+        deleteDuplicates(temp->val);
         temp = temp->next;
     }
 }
 
-// Bubble sort (should move to merge/quick)
 void LinkedList::sort() {
+    std::vector<int> vec;
+    while (head != nullptr) {
+        vec.push_back(head->val);
+        deleteFirst();
+    }
+    std::sort(vec.begin(), vec.end());
+    for (int i = 0, n = static_cast<int>(vec.size() - 1); i < n; i++) {
+        append(vec[i]);
+    }
+}
+
+void LinkedList::bubbleSort() {
     int swapCounter {-1};
     while (swapCounter != 0) {
-        Node *temp = head;
         swapCounter = 0;
+        std::shared_ptr<Node> temp {head};
         for (int i = 0; i < length - 1; i++) {
             if (temp->val > temp->next->val) {
-                int t = temp->next->val;
-                temp->next->val = temp->val;
-                temp->val = t;
+                std::swap(temp->val, temp->next->val);
                 swapCounter++;
             }
             temp = temp->next;
@@ -343,103 +298,103 @@ void LinkedList::sort() {
     }
 }
 
-void LinkedList::reverseSort() {
-    sort();
-    reverse();
+void LinkedList::reverse() {
+    std::shared_ptr<Node> temp{head};
+    head = tail;
+    tail = temp;
+    std::shared_ptr<Node> after{nullptr};
+    std::shared_ptr<Node> prev{nullptr};
+    for (int i = 0; i < length; i++) {
+        after = temp->next;
+        temp->next = prev;
+        prev = temp;
+        temp = after;
+    }
 }
 
-// Concatenates another linked list to the end
-LinkedList &LinkedList::concatenate(LinkedList &ll) {
-    while (ll.head != nullptr) {
-        this->tail->next = ll.head;
-        this->tail = ll.head;
-        ll.head = ll.head->next;
-        length++;
+LinkedList& LinkedList::concatenate(const LinkedList& ll) {
+    std::shared_ptr<Node> temp {ll.head};
+    for (int i = 0, n = ll.length; i < n; i++) {
+        append(temp->val);
+        temp = temp->next;
     }
-    ll.head = nullptr;
-    ll.tail = nullptr;
-    tail->next = nullptr;
     return *this;
 }
 
-LinkedList &LinkedList::operator+=(LinkedList &ll) {
+LinkedList& LinkedList::operator+=(const LinkedList& ll) {
     return concatenate(ll);
 }
 
-LinkedList &LinkedList::multiply(LinkedList &ll) {
-    Node *t1 {this->head};
-    Node *t2 {ll.head};
-    for (int i = 0; i < this->length; i++) {
-        if (t2 != nullptr) {
-            t1->val *= t2->val;
+std::unique_ptr<LinkedList> LinkedList::add(const LinkedList &ll1, const LinkedList &ll2) {
+    std::unique_ptr<LinkedList> newList {std::make_unique<LinkedList>()};
+    std::shared_ptr<Node> temp1 {ll1.head};
+    std::shared_ptr<Node> temp2 {ll2.head};
+    while (temp1 != nullptr) {
+        if (temp2->next == nullptr && ll1.length != ll2.length) {
+            newList->append(temp1->val + temp2->val);
+            temp1 = temp1->next;
+            break;
+        }
+        newList->append(temp1->val + temp2->val);
+        temp1 = temp1->next;
+        temp2 = temp2->next;
+    }
+    if (ll1.length > ll2.length) {
+        while (temp1 != nullptr) {
+            newList->append(temp1->val);
+            temp1 = temp1->next;
+        }
+    } else {
+        while (temp2 != nullptr) {
+            newList->append(temp2->val);
+            temp2 = temp2->next;
+        }
+    }
+    return newList;
+}
+
+bool LinkedList::isPalindrome() {
+    if (length < 1 || head->val != tail->val) return false;
+    std::shared_ptr<Node> t1 {head->next};
+    int j {2};
+    for (int i = 0; i < length / 2; i++) {
+        std::shared_ptr<Node> t2 {get(length - j)};
+        if (t1->val != t2->val) return false;
+        t1 = t1->next;
+        j++;
+    }
+    return true;
+}
+
+// Naive method. Would be faster to use an unordered map
+std::unique_ptr<LinkedList> LinkedList::intersection(LinkedList ll1, LinkedList ll2) {
+    ll1.deleteDuplicates();
+    ll2.deleteDuplicates();
+    std::unique_ptr<LinkedList> newList {std::make_unique<LinkedList>()};
+    std::shared_ptr<Node> t1 {ll1.head};
+    for (int i = 0; i < ll1.length; i++) {
+        std::shared_ptr<Node> t2 {ll2.head};
+        for (int j = 0; j < ll2.length; j++) {
+            bool alreadyPresent {false};
+            if (t1->val == t2->val) {
+                std::shared_ptr<Node> t3 {newList->head};
+                for (int k = 0; k < newList->length; k++) {
+                    if (t3->val == t1->val) {
+                        alreadyPresent = true;
+                        break;
+                    }
+                    t3 = t3->next;
+                }
+                if (!alreadyPresent) {
+                    newList->append(t1->val);
+                    break;
+                }
+            }
             t2 = t2->next;
         }
         t1 = t1->next;
     }
-    if (this->length < ll.length) {
-        while (t2 != nullptr) {
-            this->append(t2->val);
-            t2 = t2->next;
-        }
-    }
-    return *this;
-}
-
-LinkedList &LinkedList::operator*=(LinkedList &ll) {
-    return multiply(ll);
-}
-
-bool LinkedList::isPalindrome() const {
-    std::string straight {};
-    Node *temp = head;
-    while (temp != nullptr) {
-        straight += static_cast<char>(temp->val + 48);
-        temp = temp->next;
-    }
-    std::string reversed = straight;
-    std::reverse(reversed.begin(), reversed.end());
-    if (reversed == straight) return true;
-    return false;
-}
-
- LinkedList &LinkedList::addDigitsOfNodes(LinkedList &ll1, LinkedList &ll2) {
-    long long result {0};
-    Node *temp = ll1.head;
-    long long num {0};
-    int index {0};
-    while (temp != nullptr) {
-        num += temp->val * static_cast<long long>(std::pow(10, ll1.length - 1 - index));
-        index++;
-        temp = temp->next;
-    }
-    result += num;
-    temp = ll2.head;
-    index = 0;
-    while (temp != nullptr) {
-        result += temp->val * static_cast<long long>(std::pow(10, ll2.length - 1 - index));
-        index++;
-        temp = temp->next;
-    }
-    auto *ll = new LinkedList(static_cast<int>(result % static_cast<long long>(10)));
-    result /= 10;
-    while (result > 0) {
-        ll->prepend((static_cast<int>(result % static_cast<long long>(10))));
-        result /= static_cast<long long>(10);
-    }
-    return *ll;
-}
-
-int LinkedList::getNumLength(long long x) {
-    int c {0};
-    while (x > 0) {
-        x /= 10;
-        c++;
-    }
-    return c;
-}
-
-void LinkedList::partition(int target) {
-    
+    return newList;
 }
 
 
