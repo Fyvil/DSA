@@ -7,9 +7,8 @@ int main() {
     auto dll = DoublyLinkedList({1,2,3});
     auto d = DoublyLinkedList({4,5,6});
 //    dll.print();
-//    dll->bubbleSort();
-//    d.print();
-    dll.merge(d);
+    dll.bubbleSort();
+    dll.append({100, 200, 300 ,400, 500});
     dll.print();
     dll.details();
     return 0;
