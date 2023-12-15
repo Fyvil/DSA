@@ -343,15 +343,53 @@ void DoublyLinkedList::concatenate(const DoublyLinkedList &dll) {
   }
 }
 
+// Returns a sorted DLL which contains the union of 2 other DLLs
 DoublyLinkedList DoublyLinkedList::Union(const DoublyLinkedList &dll1,
                                          const DoublyLinkedList &dll2) {
-  return *this;
+  DoublyLinkedList dll{DoublyLinkedList()};
+  Node *temp{dll1.head};
+  for (int i = 0; i < dll1.length; i++) {
+    dll.append(temp->val);
+    temp = temp->next;
+  }
+  temp = dll2.head;
+  while (temp != nullptr) {
+    bool duplicateFound{false};
+    Node *t{dll.head};
+    for (int i = 0; i < dll.length; i++) {
+      if (temp->val == t->val) {
+        duplicateFound = true;
+        break;
+      }
+      t = t->next;
+    }
+    if (!duplicateFound) {
+      dll.append(temp->val);
+    }
+    temp = temp->next;
+  }
+  dll.sort();
+  return dll;
 }
 
-void DoublyLinkedList::intersection(const DoublyLinkedList &dll) {
-  set();
-  Node *t1{head};
-  Node *t2{dll.head};
+// Returns a sorted DLL which is the intersection of 2 other DLLs
+DoublyLinkedList DoublyLinkedList::intersection(const DoublyLinkedList &dll1,
+                                                const DoublyLinkedList &dll2) {
+  DoublyLinkedList dll{DoublyLinkedList()};
+  Node *t1{dll1.head};
+  while (t1 != nullptr) {
+    Node *t2{dll2.head};
+    for (int i = 0; i < dll2.length; i++) {
+      if (t1->val == t2->val) {
+        dll.append(t1->val);
+        break;
+      }
+      t2 = t2->next;
+    }
+    t1 = t1->next;
+  }
+  dll.sort();
+  return dll;
 }
 
 void DoublyLinkedList::merge(const DoublyLinkedList &dll) {

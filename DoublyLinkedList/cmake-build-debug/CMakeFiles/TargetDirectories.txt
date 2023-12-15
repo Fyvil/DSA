@@ -1,3 +1,0 @@
-C:/Users/praji/DSA/DoublyLinkedList/cmake-build-debug/CMakeFiles/DoublyLinkedList.dir
-C:/Users/praji/DSA/DoublyLinkedList/cmake-build-debug/CMakeFiles/edit_cache.dir
-C:/Users/praji/DSA/DoublyLinkedList/cmake-build-debug/CMakeFiles/rebuild_cache.dir
