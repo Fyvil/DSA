@@ -392,10 +392,24 @@ DoublyLinkedList DoublyLinkedList::intersection(const DoublyLinkedList &dll1,
   return dll;
 }
 
-void DoublyLinkedList::merge(const DoublyLinkedList &dll) {
-  Node *temp{dll.head};
-  while (temp != nullptr) {
-    append(temp->val);
+void DoublyLinkedList::rotate(int k) {
+  if (length <= 1) {
+    return;
+  }
+  if (k > length) {
+    k = k % length;
+  }
+  Node *temp{head};
+  Node *newHead{head};
+  for (int i = 0; i < k; i++) {
+    newHead = newHead->next;
+  }
+  head = newHead;
+  for (int i = 0; i < k; i++) {
+    temp->prev = tail;
+    tail->next = temp;
+    tail = temp;
     temp = temp->next;
   }
+  tail->next = nullptr;
 }

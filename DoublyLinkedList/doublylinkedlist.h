@@ -78,7 +78,7 @@ public:
   static DoublyLinkedList intersection(const DoublyLinkedList &dll1,
                                        const DoublyLinkedList &dll2);
 
-  void merge(const DoublyLinkedList &dll);
+  void rotate(int k);
 };
 
 #endif // DOUBLYLINKEDLIST_DOUBLYLINKEDLIST_H

@@ -34,5 +34,8 @@ int main() {
   intersectionDLL.print();
   intersectionDLL.details();
 
+  unionDLL.rotate(5);
+  unionDLL.print();
+  unionDLL.details();
   return 0;
 }
