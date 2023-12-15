@@ -3,78 +3,70 @@
 
 #include <iostream>
 #include <vector>
+#include <climits>
+#include <algorithm>
 
-
-class Node {
-public:
+struct Node {
     int val;
-    Node *next;
-    Node *prev;
+    Node* next;
+    Node* prev;
     explicit Node(int x) : val{x}, next{nullptr}, prev{nullptr} {}
-    ~Node() {
-        next = nullptr;
-        prev = nullptr;
-    }
+    ~Node() = default;
 };
 
 
 class DoublyLinkedList {
 private:
-    Node *head;
+    Node* head;
+    Node *tail;
     int length;
-
-    // Getters
-
-    [[nodiscard]] Node * getTail() const;
-    [[nodiscard]] Node * get(int index) const;
 public:
-    // Constructors and Destructor
-
-    DoublyLinkedList();
+    DoublyLinkedList() : head{nullptr}, tail{nullptr}, length{0} {}
     explicit DoublyLinkedList(int x);
+    DoublyLinkedList(int *arr, int arr_len);
     explicit DoublyLinkedList(const std::vector<int> &vec);
     ~DoublyLinkedList();
 
-    // Utility
     void print() const;
     void details() const;
 
-    // Adding to DLL
+    Node* getHead() { if (length == 0) return nullptr; return head; }
+    Node* getTail() { if (length == 0) return nullptr; return tail; }
+    int size() { return length; }
+    Node* get(int index);
 
     void prepend(int x);
+    void prepend(int *arr, int arr_len);
     void prepend(const std::vector<int> &vec);
     void append(int x);
+    void append(int *arr, int arr_len);
     void append(const std::vector<int> &vec);
     void insert(int index, int x);
+    void insert(int index, int *arr, int arr_len);
     void insert(int index, const std::vector<int> &vec);
 
-    // Removing from DLL
-
     void deleteFirst();
-    void pop();
-    void pop(int index);
-    void deleteFrom(int start);
+    void deleteLast();
+    void deleteNode(int index);
+    // deletes nodes in range from start to end (both inclusive)
     void deleteInRange(int start, int end);
+    void deleteAllNodes();
+    void deleteFirstKNodes(int k);
+    // deletes all duplicates of specifies value if it exists
+    void deleteDuplicates(int x);
+    // deletes all duplicates
+    void set();
+    // pops node and returns the node value
+    int pop(int index);
 
-    // Sorting
-
+    void sort();
     void reverse();
-    void bubbleSort();
-    void reverseSort();
 
-    //concatenation
-    DoublyLinkedList & operator+=(const DoublyLinkedList &dll);
+    void concatenate(const DoublyLinkedList &dll);
+    DoublyLinkedList Union(const DoublyLinkedList &dll1, const DoublyLinkedList &dll2);
+    void intersection(const DoublyLinkedList &dll);
+    void merge(const DoublyLinkedList &dll);
 
-    // Removing duplicates(aka set)
-
-    bool set(int x);
-    bool set();
-
-    // Merge at alternate positions
-    void merge(DoublyLinkedList &dll);
-
-    // Merge at alternate positions up till index of dll
-    void merge(DoublyLinkedList &dll, int index);
 };
 
 
