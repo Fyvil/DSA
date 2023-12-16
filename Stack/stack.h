@@ -3,38 +3,37 @@
 #define STACK_STACK_H
 
 #include <iostream>
-#include <vector>
 #include <memory>
+#include <vector>
 
 class Node {
 public:
-    int val;
-    std::shared_ptr<Node> next;
-    explicit Node(int x) : val{x}, next{nullptr} {}
+  int val;
+  std::shared_ptr<Node> next;
+  explicit Node(int x) : val{x}, next{nullptr} {}
 };
-
 
 class Stack {
 private:
-    std::shared_ptr<Node> head;
-    int height;
+  std::shared_ptr<Node> head;
+  int height;
+
 public:
-    Stack() : head{nullptr}, height{0} {}
-    explicit Stack(int x);
-    explicit Stack (const std::vector<int> &vec);
-    ~Stack();
+  Stack() : head{nullptr}, height{0} {}
+  explicit Stack(int x);
+  explicit Stack(const std::vector<int> &vec);
+  ~Stack();
 
-    void print() const;
-    [[nodiscard]] std::shared_ptr<Node> getTail() const;
-    void details() const;
+  void print() const;
+  [[nodiscard]] std::shared_ptr<Node> getTail() const;
+  void details() const;
 
-    void push(int x);
-    void push(const std::vector<int> &vec);
+  void push(int x);
+  void push(const std::vector<int> &vec);
 
-    bool pop();
-    bool pop(int k);
-    bool emptyStack();
+  bool pop();
+  bool pop(int k);
+  bool emptyStack();
 };
 
-
-#endif //STACK_STACK_H
+#endif // STACK_STACK_H

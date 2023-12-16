@@ -69,6 +69,7 @@ public:
 
   void sort();
   void reverse();
+  void reverseSublist(int m, int n);
 
   void concatenate(const DoublyLinkedList &dll);
 

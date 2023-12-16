@@ -335,6 +335,17 @@ void DoublyLinkedList::reverse() {
   }
 }
 
+void DoublyLinkedList::reverseSublist(int m, int n) {
+  if (length <= 1 || m <= 0 || n > length || m >= n) {
+    return;
+  }
+  if (m == 1 && n == length) {
+    reverse();
+    return;
+  }
+  // to be completed
+}
+
 void DoublyLinkedList::concatenate(const DoublyLinkedList &dll) {
   Node *temp{dll.head};
   while (temp != nullptr) {
@@ -392,6 +403,7 @@ DoublyLinkedList DoublyLinkedList::intersection(const DoublyLinkedList &dll1,
   return dll;
 }
 
+// 'Rotates' the DLL by k nodes
 void DoublyLinkedList::rotate(int k) {
   if (length <= 1) {
     return;

@@ -7,33 +7,32 @@
 
 class Node {
 public:
-    int val;
-    std::shared_ptr<Node> next;
-    explicit Node(int x) : val{x}, next{nullptr} {}
-    ~Node() = default;
+  int val;
+  std::shared_ptr<Node> next;
+  explicit Node(int x) : val{x}, next{nullptr} {}
+  ~Node() = default;
 };
-
 
 class Queue {
 private:
-    std::shared_ptr<Node> first;
-    std::shared_ptr<Node> last;
-    int length;
+  std::shared_ptr<Node> first;
+  std::shared_ptr<Node> last;
+  int length;
+
 public:
-    Queue() : first{nullptr}, last{nullptr}, length{0} {}
-    explicit Queue(int x);
-    explicit Queue(const std::vector<int> &vec);
-    ~Queue();
+  Queue() : first{nullptr}, last{nullptr}, length{0} {}
+  explicit Queue(int x);
+  explicit Queue(const std::vector<int> &vec);
+  ~Queue();
 
-    void print() const;
-    void details() const;
-    [[nodiscard]] int getFirst() const { return first->val; }
+  void print() const;
+  void details() const;
+  [[nodiscard]] int getFirst() const { return first->val; }
 
-    bool enqueue(int x);
-    bool enqueue(const std::vector<int> &vec);
-    bool dequeue();
-    bool dequeue(int k);
+  bool enqueue(int x);
+  bool enqueue(const std::vector<int> &vec);
+  bool dequeue();
+  bool dequeue(int k);
 };
 
-
-#endif //QUEUE_QUEUE_H
+#endif // QUEUE_QUEUE_H

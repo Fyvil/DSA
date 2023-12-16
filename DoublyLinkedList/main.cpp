@@ -35,6 +35,7 @@ int main() {
   intersectionDLL.details();
 
   unionDLL.rotate(5);
+  unionDLL.reverseSublist(2, 5);
   unionDLL.print();
   unionDLL.details();
   return 0;
