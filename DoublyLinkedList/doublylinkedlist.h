@@ -31,14 +31,19 @@ public:
   void details() const;
 
   Node *getHead() {
-    if (length == 0)
+    if (length == 0) {
       return nullptr;
-    return head;
+    } else {
+      return head;
+    }
   }
+
   Node *getTail() {
-    if (length == 0)
+    if (length == 0) {
       return nullptr;
-    return tail;
+    } else {
+      return tail;
+    }
   }
   int size() { return length; }
   Node *get(int index);
