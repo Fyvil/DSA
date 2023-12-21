@@ -271,3 +271,93 @@ void LinkedList::slice(int start, int end) {
 }
 
 void LinkedList::makeEmpty() { slice(0, size()); }
+
+// Deletes all duplicates of a value if it exists
+void LinkedList::deleteDuplicates(int x) {
+  if (len <= 1) {
+    return;
+  }
+  bool x_found{false};
+  Node *temp{head};
+  while (temp != nullptr) {
+    if (temp->val == x) {
+      x_found = true;
+      break;
+    }
+    temp = temp->next;
+  }
+  if (x_found) {
+    while (temp != nullptr && temp->next != nullptr) {
+      if (temp->next->val == x) {
+        if (temp->next == tail) {
+          deleteLast();
+        } else {
+          Node *nodeToDelete{temp->next};
+          temp->next = nodeToDelete->next;
+          delete nodeToDelete;
+          len--;
+          continue;
+        }
+      }
+      temp = temp->next;
+    }
+  }
+}
+
+void LinkedList::set() {
+  Node *temp{head};
+  while (temp != nullptr) {
+    deleteDuplicates(temp->val);
+    temp = temp->next;
+  }
+}
+
+// naive bubble sort
+void LinkedList::bubbleSort() {
+  if (len <= 1) {
+    return;
+  }
+  int swapCounter{-1};
+  while (swapCounter != 0) {
+    Node *temp{head};
+    swapCounter = 0;
+    for (int i = 0, n = len - 1; i < n; i++) {
+      if (temp->val > temp->next->val) {
+        int t{temp->next->val};
+        temp->next->val = temp->val;
+        temp->val = t;
+        swapCounter++;
+      }
+      temp = temp->next;
+    }
+  }
+}
+
+// reverses linked list in place
+void LinkedList::reverse() {
+  if (len <= 1) {
+    return;
+  }
+  Node *temp{head};
+  head = tail;
+  tail = temp;
+  Node *after;
+  Node *before{nullptr};
+  for (int i = 0; i < len; i++) {
+    after = temp->next;
+    temp->next = before;
+    before = temp;
+    temp = after;
+  }
+}
+
+// Reverses sublist from start(inclusive) up till end(inclusive)
+void LinkedList::reverseSublist(int start, int end) {
+  if (len <= 1 || start >= end || start < 0 || end >= len) {
+    return;
+  }
+  if (start == 0 && end == len - 1) {
+    reverse();
+    return;
+  }
+}

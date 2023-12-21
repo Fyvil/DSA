@@ -46,6 +46,13 @@ public:
 
   void slice(int start, int end);
   void makeEmpty();
+
+  void deleteDuplicates(int x);
+  void set();
+
+  void bubbleSort();
+  void reverse();
+  void reverseSublist(int start, int end);
 };
 
 #endif // !LINKEDLIST_H
