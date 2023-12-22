@@ -6,9 +6,11 @@ int main() {
                            1, 1, 2, 2, 2, 3, 3, 4, 5, 1, 1, 1, 1})};
   ll->set();
   ll->bubbleSort();
-  ll->reverse();
+  auto *ll2{new LinkedList({4, 5, 6, 7, 8, 9})};
+  ll->swap(0, 3);
   ll->print();
   ll->details();
   delete ll;
+  delete ll2;
   return 0;
 }

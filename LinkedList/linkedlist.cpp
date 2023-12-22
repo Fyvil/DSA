@@ -1,4 +1,5 @@
 #include "./linkedlist.h"
+#include <cmath>
 #include <vector>
 
 LinkedList::LinkedList() {
@@ -91,6 +92,17 @@ void LinkedList::details() const {
     std::cout << "Head: " << head->val << "\nTail: " << tail->val
               << "\nLength: " << len << std::endl;
   }
+}
+
+Node *LinkedList::get(int index) {
+  if (index < 0 || index >= len) {
+    return nullptr;
+  }
+  Node *temp{head};
+  for (int i = 0; i < index; i++) {
+    temp = temp->next;
+  }
+  return temp;
 }
 
 void LinkedList::prepend(int x) {
@@ -356,8 +368,186 @@ void LinkedList::reverseSublist(int start, int end) {
   if (len <= 1 || start >= end || start < 0 || end >= len) {
     return;
   }
+  Node *tempHead{head};
+  Node *tempTail{head};
+  Node *after;
+  Node *before;
+  Node *temp;
+  Node *t;
+  int range{end - start};
+  Node *dummy{new Node(0)};
+  Node *dummy2{new Node(0)};
   if (start == 0 && end == len - 1) {
     reverse();
     return;
+  } else if (start == 0 && end != len - 1) {
+    for (int i = 0; i < range; i++) {
+      tempTail = tempTail->next;
+    }
+    head = tempTail;
+    temp = tempHead;
+    before = nullptr;
+    dummy->next = tempTail->next;
+  } else if (start != 0 && end == len - 1) {
+    tempTail = tail;
+    for (int i = 0; i < start - 1; i++) {
+      tempHead = tempHead->next;
+    }
+    before = tempHead;
+    temp = tempHead;
+    tempHead = tempHead->next;
+    tail = tempHead;
+    dummy->next = tempTail;
+  } else {
+    for (int i = 0; i < start - 1; i++) {
+      tempHead = tempHead->next;
+    }
+    before = tempHead;
+    temp = tempHead;
+    tempHead = tempHead->next;
+    tempTail = tempHead;
+    t = tempHead;
+    for (int i = 0; i < range; i++) {
+      tempTail = tempTail->next;
+    }
+    dummy->next = tempTail;
+    dummy2->next = tempTail->next;
+  }
+  for (int i = 0; i <= range; i++) {
+    after = tempHead->next;
+    tempHead->next = before;
+    before = tempHead;
+    tempHead = after;
+  }
+  temp->next = dummy->next;
+  delete dummy;
+  if (start != 0 && end != len - 1) {
+    t->next = dummy2->next;
+  }
+  delete dummy2;
+  tail->next = nullptr;
+}
+
+void LinkedList::concatenate(const LinkedList &ll) {
+  Node *temp{ll.head};
+  while (temp != nullptr) {
+    append(temp->val);
+    temp = temp->next;
   }
 }
+
+// Adds the 2 linked lists (Eg: LL with nodes 12345 and another LL with nodes
+// 123 will be (12345 + 123) = 12468 -> This will represent the modified LL)
+LinkedList &LinkedList::operator+=(const LinkedList &ll) {
+  int num1{0};
+  int mult{len - 1};
+  Node *temp{head};
+  while (temp != nullptr) {
+    num1 += temp->val * static_cast<int>(std::pow(10, mult));
+    mult--;
+    temp = temp->next;
+  }
+  makeEmpty();
+  int num2{0};
+  mult = ll.len - 1;
+  temp = ll.head;
+  while (temp != nullptr) {
+    num2 += temp->val * static_cast<int>(std::pow(10, mult));
+    mult--;
+    temp = temp->next;
+  }
+  long sum{num1 + num2};
+  int numDigits{0};
+  long t{sum};
+  while (t > 0) {
+    numDigits++;
+    t /= 10;
+  }
+  for (int i = 0; i < numDigits; i++) {
+    prepend(sum % 10);
+    sum /= 10;
+  }
+  return *this;
+}
+
+// Multiplies digits of LL1 with LL2 and modified LL1 accordingly
+LinkedList &LinkedList::operator*=(const LinkedList &ll) {
+  int num1{0};
+  int mult{len - 1};
+  Node *temp{head};
+  while (temp != nullptr) {
+    num1 += temp->val * static_cast<int>(std::pow(10, mult));
+    mult--;
+    temp = temp->next;
+  }
+  makeEmpty();
+  int num2{0};
+  mult = ll.len - 1;
+  temp = ll.head;
+  while (temp != nullptr) {
+    num2 += temp->val * static_cast<int>(std::pow(10, mult));
+    mult--;
+    temp = temp->next;
+  }
+  long product{num1 * num2};
+  std::cout << product << std::endl;
+  long t{product};
+  int numDigits{0};
+  while (t > 0) {
+    numDigits++;
+    t /= 10;
+  }
+  for (int i = 0; i < numDigits; i++) {
+    prepend(product % 10);
+    product /= 10;
+  }
+  return *this;
+}
+
+// Finds the union of 2 linked lists and returns a new sorted linked list(no
+// duplicates)
+LinkedList LinkedList::Union(const LinkedList &ll1, const LinkedList &ll2) {
+  LinkedList newLinkedList{};
+  newLinkedList.concatenate(ll1);
+  newLinkedList.concatenate(ll2);
+  newLinkedList.set();
+  newLinkedList.bubbleSort();
+  return newLinkedList;
+}
+
+// Finds the intersection of 2 linked lists and returns a new sorted linked list
+// (no duplicates)
+LinkedList LinkedList::Intersection(const LinkedList &ll1,
+                                    const LinkedList &ll2) {
+  LinkedList newLinkedList{};
+  if (ll1.len == 0 && ll2.len == 0) {
+    return newLinkedList;
+  }
+  Node *t1;
+  Node *t2;
+  if (ll1.len >= ll2.len) {
+    t1 = ll1.head;
+    t2 = ll2.head;
+  } else {
+    t1 = ll2.head;
+    t2 = ll1.head;
+  }
+  while (t2 != nullptr) {
+    Node *t{t1};
+    bool unionFound{false};
+    while (t != nullptr) {
+      if (t2->val == t->val) {
+        newLinkedList.append(t2->val);
+        break;
+      }
+      t = t->next;
+    }
+    t2 = t2->next;
+  }
+  newLinkedList.set();
+  newLinkedList.bubbleSort();
+  return newLinkedList;
+}
+
+// Swaps two nodes by index (swaps the nodes themselves, not the values)
+void LinkedList::swap(int m, int n) {}

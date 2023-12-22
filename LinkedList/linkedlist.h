@@ -12,6 +12,7 @@ struct Node {
 };
 
 class LinkedList {
+
 private:
   Node *head;
   Node *tail;
@@ -28,6 +29,9 @@ public:
   void print() const;
   void details() const;
   int size() const { return len; }
+  Node *get(int index);
+  Node *getHead() { return head; }
+  Node *getTail() { return tail; }
 
   void prepend(int x);
   void prepend(const int *arr, const int &arr_len);
@@ -53,6 +57,15 @@ public:
   void bubbleSort();
   void reverse();
   void reverseSublist(int start, int end);
+  void concatenate(const LinkedList &ll);
+
+  LinkedList &operator+=(const LinkedList &ll);
+  LinkedList &operator*=(const LinkedList &ll);
+
+  static LinkedList Union(const LinkedList &ll1, const LinkedList &ll2);
+  static LinkedList Intersection(const LinkedList &ll1, const LinkedList &ll2);
+
+  void swap(int m, int n);
 };
 
 #endif // !LINKEDLIST_H
