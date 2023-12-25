@@ -550,4 +550,47 @@ LinkedList LinkedList::Intersection(const LinkedList &ll1,
 }
 
 // Swaps two nodes by index (swaps the nodes themselves, not the values)
-void LinkedList::swap(int m, int n) {}
+void LinkedList::swap(int m, int n) {
+  if (m < 0 || m >= len || n < 0 || n >= len || m >= n) {
+    return;
+  }
+  int lowerIndex, higherIndex;
+  if (m < n) {
+    lowerIndex = m;
+    higherIndex = n;
+  } else {
+    lowerIndex = n;
+    higherIndex = m;
+  }
+  Node *lower{get(lowerIndex)}, *higher{get(higherIndex)}, *lowerPrev,
+      *higherPrev{get(higherIndex - 1)}, *lowerNext{get(lowerIndex + 1)},
+      *higherNext{get(higherIndex + 1)};
+  if (higherIndex == len - 1) {
+    tail = lower;
+  }
+  if (lowerIndex == 0) {
+    head = higher;
+    lower->next = higherNext;
+    // If adjacent at head
+    if (higherIndex - lowerIndex == 1) {
+      higher->next = lower;
+    } else {
+      higherPrev->next = lower;
+      higher->next = lowerNext;
+    }
+  } else {
+    lowerPrev = get(lowerIndex - 1);
+    // if adjacent
+    if (higherIndex - lowerIndex == 1) {
+      lowerPrev->next = higher;
+      higher->next = lower;
+      lower->next = higherNext;
+    } else {
+      lowerPrev->next = higher;
+      higher->next = lowerNext;
+      higherPrev->next = lower;
+      lower->next = higherNext;
+      tail->next = nullptr;
+    }
+  }
+}

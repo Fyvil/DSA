@@ -7,7 +7,8 @@ int main() {
   ll->set();
   ll->bubbleSort();
   auto *ll2{new LinkedList({4, 5, 6, 7, 8, 9})};
-  ll->swap(0, 3);
+  ll->append({6, 7, 8});
+  ll->swap(0, 7);
   ll->print();
   ll->details();
   delete ll;
