@@ -65,8 +65,11 @@ public:
   static LinkedList Union(const LinkedList &ll1, const LinkedList &ll2);
   static LinkedList Intersection(const LinkedList &ll1, const LinkedList &ll2);
 
-  void swapAdjacent(int m, int n);
   void swap(int m, int n);
+  void swapValues(int m, int n);
+
+  void merge(const LinkedList &ll);
+  static LinkedList merge(const LinkedList &ll1, const LinkedList &ll2);
 };
 
 #endif // !LINKEDLIST_H

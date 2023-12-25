@@ -551,7 +551,7 @@ LinkedList LinkedList::Intersection(const LinkedList &ll1,
 
 // Swaps two nodes by index (swaps the nodes themselves, not the values)
 void LinkedList::swap(int m, int n) {
-  if (m < 0 || m >= len || n < 0 || n >= len || m >= n) {
+  if (m < 0 || m >= len || n < 0 || n >= len || m == n) {
     return;
   }
   int lowerIndex, higherIndex;
@@ -568,6 +568,7 @@ void LinkedList::swap(int m, int n) {
   if (higherIndex == len - 1) {
     tail = lower;
   }
+  // If the lower indexed node to be swapped is pointing to the head
   if (lowerIndex == 0) {
     head = higher;
     lower->next = higherNext;
@@ -593,4 +594,52 @@ void LinkedList::swap(int m, int n) {
       tail->next = nullptr;
     }
   }
+}
+
+void LinkedList::swapValues(int m, int n) {
+  if (m < 0 || n < 0 || m >= len || n >= len || m == n) {
+    return;
+  }
+  int temp{get(m)->val};
+  get(m)->val = get(n)->val;
+  get(n)->val = temp;
+}
+
+// takes a sorted linked list and merges it into the current linked list. Sorted
+// in ascending order
+void LinkedList::merge(const LinkedList &ll) {
+  if (ll.len == 0) {
+    return;
+  }
+  Node *t2{ll.head};
+  for (int i = 0; i < ll.len; i++) {
+    Node *t1{head};
+    int t1pos{0};
+    while (t1 != nullptr) {
+      if (t2->val <= t1->val) {
+        insert(t1pos, t2->val);
+        break;
+      } else {
+        t1 = t1->next;
+        t1pos++;
+      }
+    }
+    t2 = t2->next;
+  }
+}
+
+LinkedList LinkedList::merge(const LinkedList &ll1, const LinkedList &ll2) {
+  if (ll1.len == 0 & ll2.len != 0) {
+    return ll2;
+  }
+  if (ll1.len != 0 && ll2.len == 0) {
+    return ll1;
+  }
+  LinkedList newLinkedList{};
+  if (ll1.len == 0 && ll2.len == 0) {
+    return newLinkedList;
+  }
+  newLinkedList = ll1;
+  newLinkedList.merge(ll2);
+  return newLinkedList;
 }

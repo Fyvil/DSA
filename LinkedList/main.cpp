@@ -6,12 +6,12 @@ int main() {
                            1, 1, 2, 2, 2, 3, 3, 4, 5, 1, 1, 1, 1})};
   ll->set();
   ll->bubbleSort();
-  auto *ll2{new LinkedList({4, 5, 6, 7, 8, 9})};
+  auto *ll2{new LinkedList({-1, 0, 1, 3, 5})};
   ll->append({6, 7, 8});
-  ll->swap(0, 7);
-  ll->print();
-  ll->details();
-  delete ll;
-  delete ll2;
+  LinkedList ll3{LinkedList::merge(*ll, *ll2)};
+  ll3.print();
+  ll3.details();
+  // delete ll;
+  // delete ll2;
   return 0;
 }
