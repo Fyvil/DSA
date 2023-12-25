@@ -628,6 +628,7 @@ void LinkedList::merge(const LinkedList &ll) {
   }
 }
 
+// Returns a new merged linked list by merging 2 other linked lists
 LinkedList LinkedList::merge(const LinkedList &ll1, const LinkedList &ll2) {
   if (ll1.len == 0 & ll2.len != 0) {
     return ll2;
