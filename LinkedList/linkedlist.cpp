@@ -324,6 +324,75 @@ void LinkedList::set() {
   }
 }
 
+// Sorts the Linked List by using merge sort on an array of LL nodes. Handles
+// around 1 million nodes
+void LinkedList::sort() {
+  int arr[len];
+  Node *temp{head};
+  int i{0};
+  for (int j = 0; j < len; j++) {
+    arr[i] = temp->val;
+    i++;
+    temp = temp->next;
+  }
+  mergeSort(arr, 0, len - 1);
+  temp = head;
+  for (int i = 0; i < len; i++) {
+    temp->val = arr[i];
+    temp = temp->next;
+  }
+}
+
+// Merges two sorted sublists of an array
+void LinkedList::mergeSubArrays(int *arr, int leftIndex, int midIndex,
+                                int rightIndex) {
+  int leftArraySize{midIndex - leftIndex + 1},
+      rightArraySize{rightIndex - midIndex};
+  int leftArray[leftArraySize];
+  int rightArray[rightArraySize];
+  for (int i = 0; i < leftArraySize; i++) {
+    leftArray[i] = arr[leftIndex + i];
+  }
+  for (int j = 0; j < rightArraySize; j++) {
+    rightArray[j] = arr[midIndex + 1 + j];
+  }
+  int i{0}, j{0}, k{leftIndex};
+  while (i < leftArraySize && j < rightArraySize) {
+    if (leftArray[i] <= rightArray[j]) {
+      arr[k] = leftArray[i];
+      i++;
+    } else {
+      arr[k] = rightArray[j];
+      j++;
+    }
+    k++;
+  }
+  if (i < leftArraySize) {
+    while (i < leftArraySize) {
+      arr[k] = leftArray[i];
+      i++;
+      k++;
+    }
+  }
+  if (j < rightArraySize) {
+    while (j < rightArraySize) {
+      arr[k] = rightArray[j];
+      j++;
+      k++;
+    }
+  }
+}
+
+void LinkedList::mergeSort(int *arr, int leftIndex, int rightIndex) {
+  if (leftIndex >= rightIndex) {
+    return;
+  }
+  int midIndex{leftIndex + (rightIndex - leftIndex) / 2};
+  mergeSort(arr, leftIndex, midIndex);
+  mergeSort(arr, midIndex + 1, rightIndex);
+  mergeSubArrays(arr, leftIndex, midIndex, rightIndex);
+}
+
 // naive bubble sort
 void LinkedList::bubbleSort() {
   if (len <= 1) {
@@ -642,5 +711,6 @@ LinkedList LinkedList::merge(const LinkedList &ll1, const LinkedList &ll2) {
   }
   newLinkedList = ll1;
   newLinkedList.merge(ll2);
+  newLinkedList.print();
   return newLinkedList;
 }

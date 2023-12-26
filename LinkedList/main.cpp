@@ -2,16 +2,17 @@
 
 int main() {
   int arr[]{100, 200, 300, 400, 500};
-  auto *ll{new LinkedList({5, 5, 5, 5, 5, 5, 5, 4, 3, 2, 1, 2, 1, 1,
-                           1, 1, 2, 2, 2, 3, 3, 4, 5, 1, 1, 1, 1})};
-  ll->set();
-  ll->bubbleSort();
-  auto *ll2{new LinkedList({-1, 0, 1, 3, 5})};
-  ll->append({6, 7, 8});
-  LinkedList ll3{LinkedList::merge(*ll, *ll2)};
-  ll3.print();
-  ll3.details();
-  // delete ll;
-  // delete ll2;
+  LinkedList ll;
+  for (int i = 0; i < 1'000; i++) {
+    ll.prepend(i);
+  }
+  ll.sort();
+  ll.print();
+  ll.details();
+  auto *ll2{new LinkedList({55, -1, 2, 0, 32, -11, 12})};
+  ll2->sort();
+  ll2->reverse();
+  ll2->print();
+  ll2->details();
   return 0;
 }

@@ -17,6 +17,9 @@ private:
   Node *head;
   Node *tail;
   int len;
+  static void mergeSubArrays(int *arr, int leftIndex, int midIndex,
+                             int rightIndex);
+  static void mergeSort(int *arr, int leftIndex, int rightIndex);
 
 public:
   LinkedList();
@@ -55,6 +58,8 @@ public:
   void set();
 
   void bubbleSort();
+  void sort();
+
   void reverse();
   void reverseSublist(int start, int end);
   void concatenate(const LinkedList &ll);
