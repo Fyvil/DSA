@@ -2,6 +2,7 @@
 #define LINKEDLIST_H
 
 #include <iostream>
+#include <cmath>
 #include <vector>
 
 struct Node {

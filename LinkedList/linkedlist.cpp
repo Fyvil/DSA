@@ -1,6 +1,4 @@
 #include "./linkedlist.h"
-#include <cmath>
-#include <vector>
 
 LinkedList::LinkedList() {
   head = nullptr;
