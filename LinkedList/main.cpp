@@ -3,7 +3,7 @@
 int main() {
   int arr[]{100, 200, 300, 400, 500};
   LinkedList ll;
-  for (int i = 0; i < 1'000; i++) {
+  for (int i = 1; i <= 2'000'000; i++) {
     ll.prepend(i);
   }
   ll.sort();

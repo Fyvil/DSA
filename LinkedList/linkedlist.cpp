@@ -323,7 +323,7 @@ void LinkedList::set() {
 }
 
 // Sorts the Linked List by using merge sort on an array of LL nodes. Handles
-// around 1 million nodes
+// around 2 million nodes
 void LinkedList::sort() {
   int arr[len];
   Node *temp{head};
@@ -346,8 +346,8 @@ void LinkedList::mergeSubArrays(int *arr, int leftIndex, int midIndex,
                                 int rightIndex) {
   int leftArraySize{midIndex - leftIndex + 1},
       rightArraySize{rightIndex - midIndex};
-  int leftArray[leftArraySize];
-  int rightArray[rightArraySize];
+  int *leftArray{new int[leftArraySize]};
+  int *rightArray{new int[rightArraySize]};
   for (int i = 0; i < leftArraySize; i++) {
     leftArray[i] = arr[leftIndex + i];
   }
@@ -379,6 +379,8 @@ void LinkedList::mergeSubArrays(int *arr, int leftIndex, int midIndex,
       k++;
     }
   }
+  delete[] leftArray;
+  delete[] rightArray;
 }
 
 void LinkedList::mergeSort(int *arr, int leftIndex, int rightIndex) {
