@@ -57,8 +57,9 @@ public:
   void set();
 
   void swap(int m, int n);
-  void sort();
   void reverse();
+  void bubbleSort();
+  void sort();
 };
 
 #endif // !DOUBLYLINKEDLIST_H

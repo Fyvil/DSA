@@ -410,4 +410,84 @@ void DoublyLinkedList::reverse() {
     before = temp;
     temp = after;
   }
+  head->prev = nullptr;
+  tail->next = nullptr;
+}
+
+void DoublyLinkedList::bubbleSort() {
+  int swapCounter{-1};
+  while (swapCounter != 0) {
+    swapCounter = 0;
+    Node *temp{head};
+    for (int i = 0; i < len - 1; i++) {
+      if (temp->val > temp->next->val) {
+        int t{temp->next->val};
+        temp->next->val = temp->val;
+        temp->val = t;
+        swapCounter++;
+      }
+      temp = temp->next;
+    }
+  }
+}
+
+void DoublyLinkedList::mergeSubArrays(int *arr, int leftIndex, int midIndex,
+                                      int rightIndex) {
+  int leftArraySize{midIndex - leftIndex + 1},
+      rightArraySize{rightIndex - midIndex};
+  int *leftArray{new int[leftArraySize]}, *rightArray{new int[rightArraySize]};
+  for (int i = 0; i < leftArraySize; i++) {
+    leftArray[i] = arr[leftIndex + i];
+  }
+  for (int j = 0; j < rightArraySize; j++) {
+    rightArray[j] = arr[midIndex + 1 + j];
+  }
+  int i{0}, j{0}, k{leftIndex};
+  while (i < leftArraySize && j < rightArraySize) {
+    if (leftArray[i] <= rightArray[j]) {
+      arr[k] = leftArray[i];
+      i++;
+    } else {
+      arr[k] = rightArray[j];
+      j++;
+    }
+    k++;
+  }
+  while (i < leftArraySize) {
+    arr[k] = leftArray[i];
+    i++;
+    k++;
+  }
+  while (j < rightArraySize) {
+    arr[k] = rightArray[j];
+    j++;
+    k++;
+  }
+  delete[] leftArray;
+  delete[] rightArray;
+}
+
+void DoublyLinkedList::mergeSort(int *arr, int leftIndex, int rightIndex) {
+  if (leftIndex >= rightIndex) {
+    return;
+  }
+  int midIndex{leftIndex + (rightIndex - leftIndex) / 2};
+  mergeSort(arr, leftIndex, midIndex);
+  mergeSort(arr, midIndex + 1, rightIndex);
+  mergeSubArrays(arr, leftIndex, midIndex, rightIndex);
+}
+
+void DoublyLinkedList::sort() {
+  int *arr{new int[len]};
+  Node *temp{head};
+  for (int i = 0; i < len; i++) {
+    arr[i] = temp->val;
+    temp = temp->next;
+  }
+  mergeSort(arr, 0, len - 1);
+  temp = head;
+  for (int j = 0; j < len; j++) {
+    temp->val = arr[j];
+    temp = temp->next;
+  }
 }
