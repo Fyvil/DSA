@@ -37,6 +37,7 @@ DoublyLinkedList::~DoublyLinkedList() {
     Node *nodeToDelete{head};
     head = head->next;
     len--;
+    delete nodeToDelete;
   }
 }
 
@@ -80,6 +81,7 @@ Node *DoublyLinkedList::getByValue(int x) {
     if (temp->val == x) {
       return temp;
     }
+    temp = temp->next;
   }
   return nullptr;
 }
@@ -490,4 +492,26 @@ void DoublyLinkedList::sort() {
     temp->val = arr[j];
     temp = temp->next;
   }
+}
+
+// Uses binary search on a sorted dll
+bool DoublyLinkedList::binarySearch(int x) {
+  int *arr{new int[len]};
+  Node *temp{head};
+  for (int i = 0; i < len; i++) {
+    arr[i] = temp->val;
+    temp = temp->next;
+  }
+  int left{0}, right{len - 1};
+  while (left <= right) {
+    int mid{(left + right) / 2};
+    if (arr[mid] < x) {
+      left = mid + 1;
+    } else if (arr[mid] > x) {
+      right = mid - 1;
+    } else {
+      return true;
+    }
+  }
+  return false;
 }

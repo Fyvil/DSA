@@ -60,6 +60,8 @@ public:
   void reverse();
   void bubbleSort();
   void sort();
+
+  bool binarySearch(int x);
 };
 
 #endif // !DOUBLYLINKEDLIST_H
