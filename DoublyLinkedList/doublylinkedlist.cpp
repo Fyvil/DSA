@@ -65,7 +65,7 @@ void DoublyLinkedList::details() const {
 
 Node *DoublyLinkedList::get(int index) {
   if (index < 0 || index >= len || len == 0) {
-    std::cout << "Invalid index!" << std::endl;
+    std::cout << "Invalid index! / Empty list" << std::endl;
     return nullptr;
   }
   Node *temp{head};
@@ -369,7 +369,8 @@ void DoublyLinkedList::swapAdjacent(int m, int n) {
   }
 }
 
-// swaps nodes at indexes m and n. Swaps the nodes themselves
+// Swaps nodes at indexes m and n. Swaps the nodes themselves - too much
+// repetition. Needs to be refactored
 void DoublyLinkedList::swap(int m, int n) {
   if (m < 0 || m >= len || n < 0 || n >= len || len < 2 || m == n) {
     return;
@@ -414,6 +415,27 @@ void DoublyLinkedList::reverse() {
   }
   head->prev = nullptr;
   tail->next = nullptr;
+}
+
+void DoublyLinkedList::reverseSublist(int start, int end) {
+  if (start < 0 || end >= len || end <= start || len <= 1) {
+    return;
+  }
+  Node *temp{get(start)}, *after, *before;
+  int range{end - start};
+  if (start == 0 && end == len - 1) {
+    reverse();
+  } else if (start == 0 & end != len - 1) {
+    before = nullptr;
+    for (int i = 0; i < range; i++) {
+      after = temp->next;
+      temp->next = before;
+      before = temp;
+      temp = after;
+    }
+    head = temp;
+    head->prev = nullptr;
+  }
 }
 
 void DoublyLinkedList::bubbleSort() {
@@ -492,6 +514,7 @@ void DoublyLinkedList::sort() {
     temp->val = arr[j];
     temp = temp->next;
   }
+  delete[] arr;
 }
 
 // Uses binary search on a sorted dll
@@ -514,4 +537,39 @@ bool DoublyLinkedList::binarySearch(int x) {
     }
   }
   return false;
+}
+
+void DoublyLinkedList::concat(const DoublyLinkedList &dll) {
+  Node *temp{dll.head};
+  while (temp != nullptr) {
+    append(temp->val);
+    temp = temp->next;
+  }
+}
+
+DoublyLinkedList DoublyLinkedList::Union(const DoublyLinkedList &dll1,
+                                         const DoublyLinkedList &dll2) {
+  DoublyLinkedList dll;
+  dll.concat(dll1);
+  dll.concat(dll2);
+  dll.set();
+  return dll;
+}
+
+DoublyLinkedList DoublyLinkedList::Intersection(const DoublyLinkedList &dll1,
+                                                const DoublyLinkedList &dll2) {
+  DoublyLinkedList dll;
+  Node *t1{dll1.head};
+  for (int i = 0; i < dll1.len; i++) {
+    Node *t2{dll2.head};
+    for (int j = 0; j < dll2.len; j++) {
+      if (t2->val == t1->val) {
+        dll.append(t2->val);
+      }
+      t2 = t2->next;
+    }
+    t1 = t1->next;
+  }
+  dll.set();
+  return dll;
 }

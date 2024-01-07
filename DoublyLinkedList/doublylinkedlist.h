@@ -58,10 +58,16 @@ public:
 
   void swap(int m, int n);
   void reverse();
+  void reverseSublist(int start, int end);
   void bubbleSort();
   void sort();
-
   bool binarySearch(int x);
+
+  void concat(const DoublyLinkedList &dll);
+  static DoublyLinkedList Union(const DoublyLinkedList &dll1,
+                                const DoublyLinkedList &dll2);
+  static DoublyLinkedList Intersection(const DoublyLinkedList &dll1,
+                                       const DoublyLinkedList &dll2);
 };
 
 #endif // !DOUBLYLINKEDLIST_H

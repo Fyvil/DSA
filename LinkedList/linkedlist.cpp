@@ -437,12 +437,7 @@ void LinkedList::reverseSublist(int start, int end) {
   if (len <= 1 || start >= end || start < 0 || end >= len) {
     return;
   }
-  Node *tempHead{head};
-  Node *tempTail{head};
-  Node *after;
-  Node *before;
-  Node *temp;
-  Node *t;
+  Node *tempHead{head}, *tempTail{head}, *after, *before, *temp, *t;
   int range{end - start};
   Node *dummy{new Node(0)};
   Node *dummy2{new Node(0)};
